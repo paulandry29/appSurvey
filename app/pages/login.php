@@ -4,13 +4,13 @@
     global $con;
 
 	if (isset($_SESSION['user'])) {
-		header("Location: view.php");
+		header("Location: home.php");
 	} else {
 		if (isset($_POST['submit'])) {
 			$user = $_POST['user'];
 			$pass = $_POST['pass'];	
             
-            $sql = $con -> prepare("SELECT * FROM user WHERE username=:a");
+            $sql = $con -> prepare("SELECT * FROM user WHERE nomor_induk=:a");
 			$sql->bindParam(':a', $user);
 			$sql->execute();
 
@@ -18,7 +18,7 @@
 
 			if( !empty($data)){
                 if(password_verify($pass, $data['password'])){
-                    $_SESSION['user'] = 'Disbudpar';
+                    $_SESSION['user'] = $user;
 				    echo "<script>alert('Selamat Datang Admin');window.location='../index.php'</script>";
                 }
                 echo "<script>alert('Login gagal bruh!!!');window.location='login.php'</script>";
@@ -39,8 +39,8 @@
 </head>
 <body>
     <form method="post">
-        <input type="text" name="username" placeholder="John Cena">
-        <input type="password" name="password" placeholder="">
+        <input type="text" name="user" placeholder="John Cena"><br>
+        <input type="password" name="pass" placeholder=""><br>
         <button type="submit" name="submit">Login</button>
     </form>
 </body>
