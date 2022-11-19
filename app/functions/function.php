@@ -2,20 +2,46 @@
 
 require_once "../db/config.php";
 
-function register($noInduk, $email, $pass, $fakultas, $privilege){
+function register($noInduk, $nama, $email, $pass, $fakultas, $privilege){
     global $con;
-    $sql = "INSERT INTO user
-            VALUES('', :no_induk, :email, :pass, :fakultas, :privilege)";
+    $sql = "INSERT INTO users VALUES('', :no_induk, :nama, :email, :pass, :fakultas, :privilege)";
     
     try {
         $stmt = $con -> prepare($sql);
         $stmt->bindValue(':no_induk', $noInduk, PDO::PARAM_STR);
+        $stmt->bindValue(':nama', $nama, PDO::PARAM_STR);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->bindValue(':pass', $pass, PDO::PARAM_STR);
         $stmt->bindValue(':fakultas', $fakultas, PDO::PARAM_INT);
         $stmt->bindValue(':privilege', $privilege, PDO::PARAM_INT);
+        $stmt->execute();
     } catch (Exception $e) {
         echo 'Error register = '.$e->getMessage();
+    }
+}
+
+function checkNoInduk($no_induk){
+    global $con;
+    $sql = "SELECT * FROM users WHERE nomor_induk = :no_induk";
+
+    try {
+        $stmt = $con -> prepare($sql);
+        $stmt->bindValue(':no_induk', $no_induk, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			$rs = $stmt->fetchAll();
+
+			if ($rs != null) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
+    } catch (Exception $e) {
+        echo 'Error checkNoInduk = '.$e->getMessage();
+        return false;
     }
 }
 
@@ -47,7 +73,7 @@ function getFakultas(){
 function getPrivilege(){
     global $con;
     $hasil = array();
-    $sql = "SELECT * FROM privilege";
+    $sql = "SELECT * FROM privilege ORDER BY id_privilege DESC LIMIT 2";
 
     try{
         $stmt = $con->prepare($sql);

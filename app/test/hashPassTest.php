@@ -4,5 +4,5 @@ $rand = [
     'value' => 10,
 ];
 
-$text = "Karlos Saha";
+$text = "admin";
 echo password_hash($text, PASSWORD_DEFAULT, $rand);

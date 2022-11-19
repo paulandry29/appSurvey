@@ -4,6 +4,7 @@ require_once '../functions/function.php';
 
 if(isset($_POST['submit'])){
     $no_induk = $_POST['no_induk'];
+    $nama = $_POST['nama'];
     $email = $_POST['email'];
     $fakultas = $_POST['progdi'];
     $pass = $_POST['pass'];
@@ -14,15 +15,15 @@ if(isset($_POST['submit'])){
     ];
     $passHash = password_hash($pass, PASSWORD_DEFAULT, $rand);
 
-    register($no_induk, $email, $passHash, $fakultas, $privilege);
+    $check = checkNoInduk($no_induk);
 
-    echo $no_induk;
-    echo $email;
-    echo $passHash;
-    echo $fakultas;
-    echo $privilege;
-    header("location:home.php");
-
+    if ($check == false) {
+        register($no_induk, $nama, $email, $passHash, $fakultas, $privilege);
+        header("location:login.php");
+    } else {
+        echo "<script>alert('Nomor induk sudah pernah didaftarkan');window.location='register.php'</script>";
+    }
+    
 }
 
 $dataProgdi = getProgdi();
@@ -41,10 +42,11 @@ $dataPrivilege = getPrivilege();
 <body>
     <form method="post">
         <input type="text" name="no_induk" placeholder="Nomor Induk"><br>
+        <input type="text" name="nama" placeholder="Nama"><br>
         <input type="email" name="email" placeholder="email@mail.com"><br>
         <select name="progdi">
             <?php foreach($dataProgdi as $val){ ?>
-            <option value="<?= $val['id_fakultas'] ?>"><?= $val['fakultas'] ?> | <?= $val['progdi'] ?></option>
+            <option value="<?= $val['id_progdi'] ?>"><?= $val['fakultas'] ?> | <?= $val['progdi'] ?></option>
             <?php } ?>
         </select><br>
         <input type="password" name="pass" placeholder="password"><br>
