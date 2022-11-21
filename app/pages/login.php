@@ -10,7 +10,7 @@
 			$user = $_POST['user'];
 			$pass = $_POST['pass'];	
             
-            $sql = $con -> prepare("SELECT users.nomor_induk, users.nama, users.password, privilege.privilege 
+            $sql = $con -> prepare("SELECT users.id_user, users.nomor_induk, users.nama, users.password, privilege.privilege 
                                     FROM users 
                                         JOIN privilege ON users.privilege = privilege.id_privilege 
                                     WHERE users.nomor_induk=:a");

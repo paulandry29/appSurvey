@@ -10,6 +10,8 @@ if (isset($_POST['submit'])) {
 
     createSurvey($judul, $user);
 
+    header("location:create.php");
+
 }
 
 $data_table='';
@@ -18,13 +20,20 @@ foreach($data as $key => $val){
     $data_table .='
     <tr>
         <td>'.$val['judul'].'</td>
-        <td><center>Delete</center></td>
+        <td>
+            <center>
+                <a href="tambahPertanyaan.php?id_survey='.$val['id'].'">Pertanyaan </a>
+                | <a href="publish.php?id_survey='.$val['id'].'">Publikasi </a> 
+                | Edit 
+                | <a href="deleteSurveySem.php?id_survey='.$val['id'].'">Hapus
+            </center>
+        </td>
     </tr>
     ';
 }
 
 if($data_table == ""){
-    $data_table = '<tr><center>NO DATA</center></tr>';
+    $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
 }
 
 ?>
@@ -35,9 +44,10 @@ if($data_table == ""){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Survey</title>
+    <title>App Survey</title>
 </head>
 <body>
+    <a href="../logout.php"><button type="sumbit">Logout</button></a>  
     <h2>Input Judul</h2>
     <form method="post">
         <input type="text" name="judul" placeholder="Judul">
@@ -45,14 +55,12 @@ if($data_table == ""){
     </form>
     <br><br>
     <h2>Survey Sementara</h2>
-    <table>
+    <table border="1">
         <tr>
             <th>Judul</th>
             <th>Aksi</th>
         </tr>
-        <tr>
-            <?= $data_table ?>
-        </tr>
+        <?= $data_table ?>
     </table>
 </body>
 </html>

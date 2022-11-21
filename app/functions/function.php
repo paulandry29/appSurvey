@@ -1,6 +1,6 @@
 <?php
 
-require_once "../db/config.php";
+require_once "config.php";
 
 function register($noInduk, $nama, $email, $pass, $fakultas, $privilege){
     global $con;
