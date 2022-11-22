@@ -202,7 +202,7 @@ function getIdSurvey(){
 
         if($rs != null){
             foreach($rs as $val){
-                $hasil['id']       = $val['id_survey'];
+                $hasil       = $val['id_survey'];
             }
         }
     }catch(Exception $e){
@@ -296,7 +296,7 @@ function deletePertanyaan($id){
 
 function getOneJudul($id){
     global $con;
-    $hasil = array();
+    $hasil = "";
 
     try {
         $sql = "SELECT * FROM survey WHERE id_survey = :id";
