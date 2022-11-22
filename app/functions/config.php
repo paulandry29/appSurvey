@@ -12,9 +12,9 @@
 
 	$configdb = array();
 	$configdb['db'] = "sql12578691";
-	$configdb['host'] = "sql12.freesqldatabase.com";
-	$configdb['user'] = "sql12578691";
-	$configdb['pass'] = "BVHS9DetgL";
+	$configdb['host'] = "localhost";
+	$configdb['user'] = "root";
+	$configdb['pass'] = "";
 
 	$con;
 
