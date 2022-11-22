@@ -1,6 +1,6 @@
 <?php
 
-    require_once '../db/config.php';
+    require_once '../functions/config.php';
     global $con;
 
 	if (isset($_SESSION['user'])) {
