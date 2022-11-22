@@ -10,6 +10,6 @@ $id_survey = getIdSurvey();
 
 publishPertanyaan($id_temp, $id_survey);
 
-header("location:create.php");
+header("location:deleteSurveySem.php?id_survey=".$id_temp."");
 
 ?>

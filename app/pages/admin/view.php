@@ -8,7 +8,10 @@ foreach($data as $key => $val){
     $data_table .='
     <tr>
         <td>'.$val['judul'].'</td>
-        <td>Edit | Hapus</td>
+        <td>
+            <a href="tambahPertanyaan.php?id_survey='.$val['id'].'">Pertanyaan</a>
+            | Edit 
+            | <a href="deleteSurvey.php?id_survey='.$val['id'].'">Hapus</td>
     </tr>
     ';
 }
@@ -28,6 +31,8 @@ if($data_table == ""){
     <title>App Survey</title>
 </head>
 <body>
+    <a href="../logout.php"><button type="sumbit">Logout</button></a>
+    <a href="create.php">Create</a>
     <table border="1">
         <tr>
             <th>Judul Survey</th>

@@ -69,15 +69,15 @@ function getOneJudulSem($id){
 function deleteSurveySem($id){
     global $con;
     try {
-        $sql = "DELETE FROM temp_survey WHERE id_survey =:id";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
         $sql2 = "DELETE FROM temp_pertanyaan WHERE id_survey =:id";
         $stmt2 = $con->prepare($sql2);
         $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt2->execute();
+        
+        $sql = "DELETE FROM temp_survey WHERE id_survey =:id";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     } catch (Exception $e) {
         echo 'Error deleteSurveySem = '.$e->getMessage();
     }
@@ -264,4 +264,58 @@ function getPertanyaan($id){
 
     return $hasil;
 }
+
+function deleteSurvey($id){
+    global $con;
+    try {
+        $sql2 = "DELETE FROM pertanyaan WHERE id_survey =:id";
+        $stmt2 = $con->prepare($sql2);
+        $stmt2->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt2->execute();
+
+        $sql = "DELETE FROM survey WHERE id_survey =:id";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error deleteSurvey = '.$e->getMessage();
+    }
+}
+
+function deletePertanyaan($id){
+    global $con;
+    try {
+        $sql = "DELETE FROM pertanyaan WHERE id_pertanyaan =:id";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error deletePertanyaan = '.$e->getMessage();
+    }
+}
+
+function getOneJudul($id){
+    global $con;
+    $hasil = array();
+
+    try {
+        $sql = "SELECT * FROM survey WHERE id_survey = :id";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue('id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            foreach($rs as $val){
+                $hasil= $val['judul_survey'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getOneJudul = '.$e->getMessage();
+    }
+
+    return $hasil;
+}
+
 ?>

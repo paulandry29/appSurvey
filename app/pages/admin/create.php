@@ -22,7 +22,7 @@ foreach($data as $key => $val){
         <td>'.$val['judul'].'</td>
         <td>
             <center>
-                <a href="tambahPertanyaan.php?id_survey='.$val['id'].'">Pertanyaan </a>
+                <a href="tambahPertanyaanSem.php?id_survey='.$val['id'].'">Pertanyaan </a>
                 | <a href="publish.php?id_survey='.$val['id'].'">Publikasi </a> 
                 | Edit 
                 | <a href="deleteSurveySem.php?id_survey='.$val['id'].'">Hapus
@@ -48,6 +48,7 @@ if($data_table == ""){
 </head>
 <body>
     <a href="../logout.php"><button type="sumbit">Logout</button></a>  
+    <a href="view.php">View</a>
     <h2>Input Judul</h2>
     <form method="post">
         <input type="text" name="judul" placeholder="Judul">

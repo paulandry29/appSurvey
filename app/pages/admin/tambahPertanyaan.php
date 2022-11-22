@@ -1,34 +1,26 @@
 <?php
 
-require_once '../../functions/adminFunction.php';
+include_once '../../functions/adminFunction.php';
 
 $id = $_GET['id_survey'];
 
-if (isset($_POST['submit'])) {
-    $pertanyaan = $_POST['pertanyaan'];
-    tambahPertanyaan($pertanyaan, $id);
-    header('location:tambahPertanyaan.php?id_survey='.$id.'');
-}
+$judul = getOneJudul($id);
 
-$judul = getOneJudulSem($id);
-
-$data_table = '';
-$data = getPertanyaanSem($id);
+$data_table = "";
+$data = getPertanyaan($id);
 foreach($data as $key => $val){
     $data_table .='
+
     <tr>
         <td>'.$val['pertanyaan'].'</td>
-        <form>
-        <td><center>Edit | <a href="deletePertanyaanSem.php?id_pertanyaan='.$val['id'].'&&id_survey='.$id.'">Delete</a></td>
-        <form>
-    </tr> 
+        <td> 
+            Edit 
+            | <a href="deletePertanyaan.php?id_pertanyaan='.$val['id'].'&&id_survey='.$id.'">Delete</a>
+        </td>
+    <tr>
+
     ';
 }
-
-if ($data_table == "") {
-    $data_table = '<tr><td colspan=2 style="color:red"><center><b>DATA BELUM TERSEDIA</b></center></td><tr>';
-}
-
 
 ?>
 
@@ -41,18 +33,8 @@ if ($data_table == "") {
     <title>App Survey</title>
 </head>
 <body>
-    <a href="create.php">kembali</a><br>
-
-    <?php
-    echo $judul;
-    ?>
-
-    <h3>Tambah Pertanyaan</h3>
-    <form method="post">
-        <input type="text" name="pertanyaan">
-        <button type="submit" name="submit">Tambah</button>
-    </form>
-    <br><br>
+    <a href="view.php">kembali</a><br><br>
+    <?= $judul ?><br><br>
     <table border="1">
         <tr>
             <th>Pertanyaan</th>
@@ -60,6 +42,5 @@ if ($data_table == "") {
         </tr>
         <?= $data_table ?>
     </table>
-    
 </body>
 </html>
