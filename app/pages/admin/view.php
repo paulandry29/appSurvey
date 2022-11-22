@@ -31,8 +31,8 @@ if($data_table == ""){
     <title>App Survey</title>
 </head>
 <body>
-    <a href="../logout.php"><button type="sumbit">Logout</button></a>
-    <a href="create.php">Create</a>
+    <a href="../logout.php"><button type="sumbit">Logout</button></a><br>
+    <a href="create.php">Create</a><br><br>
     <table border="1">
         <tr>
             <th>Judul Survey</th>

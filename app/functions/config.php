@@ -4,6 +4,12 @@
 	error_reporting(-1);
 	ini_set('display_errors', 1);
 
+	// $configdb = array();
+	// $configdb['db'] = "sql12578691";
+	// $configdb['host'] = "sql12.freesqldatabase.com";
+	// $configdb['user'] = "sql12578691";
+	// $configdb['pass'] = "BVHS9DetgL";
+
 	$configdb = array();
 	$configdb['db'] = "sql12578691";
 	$configdb['host'] = "sql12.freesqldatabase.com";

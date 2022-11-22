@@ -5,7 +5,7 @@ require_once '../functions/function.php';
 if(!isset($_SESSION['user'])){
     header("location:login.php");
 }elseif ($_SESSION['privilege'] == 'admin') {
-    header("location:admin/create.php");
+    header("location:admin/view.php");
 }
 
 echo $_SESSION['privilege'];
