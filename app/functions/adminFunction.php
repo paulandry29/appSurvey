@@ -318,4 +318,29 @@ function getOneJudul($id){
     return $hasil;
 }
 
+function getRespon($id){
+    global $con;
+    $hasil = array();
+    $sql = "SELECT * FROM respon WHERE id_survey = :id";
+
+    try {
+        $stmt = $con -> prepare($sql);
+        $stmt -> bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $i=0;
+            foreach($rs as $val){
+                $hasil[$i]['id_respon']      = $val['id_respon'];
+                $hasil[$i]['id_user']      = $val['id_user'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getRespon = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
 ?>

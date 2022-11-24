@@ -9,9 +9,11 @@ foreach($data as $key => $val){
     <tr>
         <td>'.$val['judul'].'</td>
         <td>
-            <a href="tambahPertanyaan.php?id_survey='.$val['id'].'">Pertanyaan</a>
+            <a href="hasilSurvey.php?id_survey='.$val['id'].'">Hasil Survey</a>
+            | <a href="tambahPertanyaan.php?id_survey='.$val['id'].'">Pertanyaan</a>
             | Edit 
-            | <a href="deleteSurvey.php?id_survey='.$val['id'].'">Hapus</td>
+            | <a href="deleteSurvey.php?id_survey='.$val['id'].'">Hapus
+        </td>
     </tr>
     ';
 }
@@ -32,7 +34,7 @@ if($data_table == ""){
 </head>
 <body>
     <a href="../logout.php"><button type="sumbit">Logout</button></a><br>
-    <a href="create.php">Create</a><br><br>
+    <a href="create.php">Create </a><br><br>
     <table border="1">
         <tr>
             <th>Judul Survey</th>
