@@ -64,23 +64,31 @@ if (isset($_SESSION['user'])) {
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                 </div>
+
                                 <form class="user" method="POST">
+
                                     <div class="form-group">
                                         <input type="text" class="form-control " name="user"
                                             placeholder="Nomor Induk">
                                     </div>
+
                                     <div class="form-group">
                                         <input type="password" class="form-control " name="pass"
                                             id="exampleInputPassword" placeholder="Password">
                                     </div>
-                                    <button type="submit" id="submit" name="submit"
-                                        class="btn btn-danger btn-user btn-block">Login</button>
+
+                                    <button type="submit" id="submit" name="submit"class="btn btn-danger btn-user btn-block">Login</button>
+
                                     <hr>
+
                                     <a class="btn btn-warning btn-user btn-block" href="register.php">Register</a>
+
                                     <hr>
+
                                     <div class="text-center">
                                         <a class="small" href="#">Lupa password?</a>
                                     </div>
+
                                 </form>
                                 
                                 

@@ -318,10 +318,12 @@ function getOneJudul($id){
     return $hasil;
 }
 
-function getRespon($id){
+function getJawaban($id){
     global $con;
     $hasil = array();
-    $sql = "SELECT * FROM respon WHERE id_survey = :id";
+    $sql = "SELECT pertanyaan.id_pertanyaan, pertanyaan.pertanyaan, jawaban.jawaban FROM pertanyaan
+                JOIN jawaban ON pertanyaan.id_pertanyaan = jawaban.id_pertanyaan
+            WHERE pertanyaan.id_survey = :id";
 
     try {
         $stmt = $con -> prepare($sql);
@@ -333,12 +335,61 @@ function getRespon($id){
         if ($rs != null) {
             $i=0;
             foreach($rs as $val){
-                $hasil[$i]['id_respon']      = $val['id_respon'];
-                $hasil[$i]['id_user']      = $val['id_user'];
+                $hasil[$i]['id_pertanyaan']     = $val['id_pertanyaan'];
+                $hasil[$i]['pertanyaan']        = $val['pertanyaan'];
+                $hasil[$i]['jawaban']           = $val['jawaban'];
+                $i++;
             }
         }
     } catch (Exception $e) {
-        echo 'Error getRespon = '.$e->getMessage();
+        echo 'Error getJawaban = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
+function getSumJawaban($id, $jawaban){
+    global $con;
+    $hasil = 0;
+    $sql = "SELECT COUNT(*) AS count FROM jawaban WHERE id_pertanyaan = :id AND jawaban = :num";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':num', $jawaban, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            foreach($rs as $val){
+                $hasil = $val['count'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getSumJawaban = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
+function getSumRespon($id){
+    global $con;
+    $hasil = 0;
+    $sql = "SELECT COUNT(*) AS count FROM respon WHERE id_survey = :id";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            foreach($rs as $val){
+                $hasil = $val['count'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getSumRespon = '.$e->getMessage();
     }
     return $hasil;
 }

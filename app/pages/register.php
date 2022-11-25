@@ -25,17 +25,15 @@ if(isset($_POST['submit'])){
     $passHash = password_hash($pass, PASSWORD_DEFAULT, $rand);
 
     if (is_numeric($no_induk)) {
-        $check = checkNoInduk($no_induk);   
+        $check = checkNoInduk($no_induk);  
+        if ($check == false) {
+            register($no_induk, $nama, $email, $passHash, $fakultas, $privilege);
+            header("location:login.php");
+        } else {
+            echo "<script>alert('Nomor induk sudah pernah didaftarkan');window.location='register.php'</script>";
+        }
     }else{
         echo "<script>alert('Mohon masukkan Nomor Induk dengan benar');window.location='register.php'</script>";
-    }
-
-    if ($check == false) {
-        register($no_induk, $nama, $email, $passHash, $fakultas, $privilege);
-        echo "<script>alert('Sukses')</script>";
-        header("location:login.php");
-    } else {
-        echo "<script>alert('Nomor induk sudah pernah didaftarkan');window.location='register.php'</script>";
     }
     
 }

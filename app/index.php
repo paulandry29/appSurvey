@@ -1,5 +1,5 @@
 <?php
 
-echo "Welcome Bitch";
+header('location:pages/home.php');
 
 ?>

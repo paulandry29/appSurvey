@@ -5,12 +5,16 @@ include_once '../../functions/adminFunction.php';
 $id = $_GET['id_survey'];
 
 $data_table="";
-$data = getRespon($id);
+$data = getJawaban($id);
 foreach($data as $key => $val){
     $data_table .='
     <tr>
-        <td>'.$val['id_respon'].'</td>
-        <td>'.$val['id_user'].'</td>
+        <td>'.$val['pertanyaan'].'</td>
+        <td>'.getSumJawaban($val['id_pertanyaan'], 1).'</td>
+        <td>'.getSumJawaban($val['id_pertanyaan'], 2).'</td>
+        <td>'.getSumJawaban($val['id_pertanyaan'], 3).'</td>
+        <td>'.getSumJawaban($val['id_pertanyaan'], 4).'</td>
+        <td>'.getSumJawaban($val['id_pertanyaan'], 5).'</td>
     </tr>
     ';
 }
@@ -32,10 +36,19 @@ if ($data_table == "") {
 <body>
     <a href="view.php">View</a><br><br>
 
+    <p>Jumlah responden = <?= getSumRespon($id) ?></p>
+
     <table border="1">
         <tr>
-            <th>ID Respon</th>
-            <th>ID User</th>
+            <th rowspan="2">Pertanyaan</th>
+            <th colspan="5">Jawaban</th>
+        </tr>
+        <tr>
+            <th>Sangat Kurang</th>
+            <th>Kurang</th>
+            <th>Cukup</th>
+            <th>Baik</th>
+            <th>Sangat Baik</th>
         </tr>
         <?= $data_table ?>
     </table>
