@@ -83,7 +83,7 @@ function deleteSurveySem($id){
     }
 }
 
-function tambahPertanyaan($pertanyaan, $id){
+function tambahPertanyaanSem($pertanyaan, $id){
     global $con;
     $sql = "INSERT INTO temp_pertanyaan VALUES('', :pertanyaan, :id)";
 
@@ -93,7 +93,7 @@ function tambahPertanyaan($pertanyaan, $id){
         $stmt->bindValue(':id', $id, PDO::PARAM_STR);
         $stmt->execute();
     } catch (Exception $e) {
-        echo 'Error tambahPertanyaan = '.$e->getMessage();
+        echo 'Error tambahPertanyaanSem = '.$e->getMessage();
     }
 }
 
@@ -237,6 +237,20 @@ function getSurvey(){
     return $hasil;
 }
 
+function tambahPertanyaan($pertanyaan, $id){
+    global $con;
+    $sql = "INSERT INTO pertanyaan VALUES('', :pertanyaan, :id)";
+
+    try {
+        $stmt = $con -> prepare($sql);
+        $stmt->bindValue(':pertanyaan', $pertanyaan, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error tambahPertanyaan = '.$e->getMessage();
+    }
+}
+
 function getPertanyaan($id){
     global $con;
     $hasil = array();
@@ -244,7 +258,7 @@ function getPertanyaan($id){
 
     try {
         $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $rs = $stmt->fetchAll();
@@ -390,6 +404,29 @@ function getSumRespon($id){
         }
     } catch (Exception $e) {
         echo 'Error getSumRespon = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
+function getOnePertanyaan($id){
+    global $con;
+    $hasil = "";
+    $sql = "SELECT pertanyaan FROM pertanyaan WHERE id_pertanyaan = :id";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if($rs != null){
+            foreach($rs as $val){
+                $hasil = $val['pertanyaan'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getOnePertanyaan = '.$e->getMessage();
     }
     return $hasil;
 }
