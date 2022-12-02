@@ -18,9 +18,10 @@ foreach($data as $key => $val){
     $data_table .='
 
     <tr>
-        <td>'.$val['pertanyaan'].'</td>
+        <td class="pertanyaan">'.$val['pertanyaan'].'</td>
+        <td hidden class="id">'.$val['id'].'</td>
         <td> 
-            <a class="btn btn-success"> Edit </a> 
+            <a class="btn btn-success btn_edit"> Edit </a> 
             <a class="btn btn-danger" href="deletePertanyaan.php?id_pertanyaan='.$val['id'].'&&id_survey='.$id.'">Delete</a>
         </td>
     <tr>
@@ -145,27 +146,6 @@ if ($data_table == "") {
                     <h2 class="h3 mb-2 text-gray-900">Judul</h2>
                     <p class="h5 mb-5 text-danger"><?= $judul ?></p>
 
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-danger">Tambah Pertanyaan</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form method="post">
-
-                                        <div class="form-group">
-                                            <textarea name="pertanyaan" cols="20" rows="10" class="form-control" ></textarea>
-                                        </div>
-                                        
-                                        <button type="submit" name="submit" class="btn btn-danger">Tambah</button>
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -266,6 +246,10 @@ if ($data_table == "") {
             </div>
         </div>
     </div>
+
+    <script>
+        
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../assets/vendor/jquery/jquery.min.js"></script>

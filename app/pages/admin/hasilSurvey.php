@@ -2,30 +2,64 @@
 
 include_once '../../functions/adminFunction.php';
 
+// error_reporting(0);
+
 $id = $_GET['id_survey'];
 
-$data_table="";
+$data_table = "";
 $data = getPertanyaan($id);
-foreach($data as $key => $val){ 
+$jsb = 0;
+$jb = 0;
+$jc = 0;
+$jk = 0;
+$jsk = 0;
+foreach ($data as $key => $val) {
     $sk = getSumJawaban($val['id'], 1);
     $k = getSumJawaban($val['id'], 2);
     $c = getSumJawaban($val['id'], 3);
     $b = getSumJawaban($val['id'], 4);
     $sb = getSumJawaban($val['id'], 5);
-    $data_table .='
+    $data_table .= '
     <tr>
-        <td>'.$val['pertanyaan'].'</td>
-        <td>'.$sb.'</td>
-        <td>'.$b.'</td>
-        <td>'.$c.'</td>
-        <td>'.$k.'</td>
-        <td>'.$sk.'</td>
+        <td>' . $val['pertanyaan'] . '</td>
+        <td>' . $sb . '</td>
+        <td>' . $b . '</td>
+        <td>' . $c . '</td>
+        <td>' . $k . '</td>
+        <td>' . $sk . '</td>
     </tr>
     ';
+    $jsb += $sb;
+    $jb += $b;
+    $jc += $c;
+    $jk += $k;
+    $jsk += $sk;
 }
 
 if ($data_table == "") {
-    $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
+    $data_table = '<tr><td colspan=6 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
+}
+
+$jRespon = getSumRespon($id);
+$jPertanyaan = getSumPertanyaan($id);
+
+$data_table2 = "";
+
+if ($jRespon == 0 || $jPertanyaan == 0) {
+    $data_table2 = "";
+} else {
+    $data_table2 .= '
+
+<tr>
+    <td>Rata-rata</td>
+    <td>' . round((($jsb / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+    <td>' . round((($jb / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+    <td>' . round((($jc / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+    <td>' . round((($jk / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+    <td>' . round((($jsk / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+</tr>
+
+';
 }
 
 ?>
@@ -72,7 +106,7 @@ if ($data_table == "") {
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            
+
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
                 <a class="nav-link" href="view.php">
@@ -138,7 +172,7 @@ if ($data_table == "") {
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800"></h1>
-                    <p class="h4 mb-4 text-danger">Jumlah Responden <?= getSumRespon($id) ?></p>
+                    <p class="h4 mb-4 text-danger">Jumlah Responden <?=$jRespon;?></p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -154,15 +188,16 @@ if ($data_table == "") {
                                             <th colspan="5"><center>Jawaban</center></th>
                                         </tr>
                                         <tr>
-                                           <th>Sangat Baik</th> 
-                                           <th>Baik</th> 
-                                           <th>Cukup</th> 
-                                           <th>Kurang</th> 
-                                           <th>Sangat Kurang</th> 
+                                           <th>Sangat Baik</th>
+                                           <th>Baik</th>
+                                           <th>Cukup</th>
+                                           <th>Kurang</th>
+                                           <th>Sangat Kurang</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?= $data_table ?>
+                                        <?=$data_table?>
+                                        <?=$data_table2?>
                                     </tbody>
                                 </table>
                             </div>
@@ -225,7 +260,7 @@ if ($data_table == "") {
 
     <!-- Custom scripts for all pages-->
     <script src="../../assets/js/sb-admin-2.min.js"></script>
-    
+
     <!-- Page level plugins -->
     <script src="../../assets/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>

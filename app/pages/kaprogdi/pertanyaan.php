@@ -1,26 +1,27 @@
 <?php
 
-include_once '../../functions/adminFunction.php';
+require_once '../../functions/kaprogdiFunction.php';
 
-$data_table="";
-$data = getSurvey();
+$id = $_GET['id_survey'];
+
+$judul = getOneJudul($id);
+
+$data_table = '';
+$data = getPertanyaan($id);
 foreach($data as $key => $val){
     $data_table .='
+
     <tr>
-        <td>'.$val['judul'].'</td>
-        <td>
-            <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
-            <a href="tambahPertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
-            <a href="#" class="btn btn-warning">Edit</a> 
-            <a href="deleteSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Hapus
-        </td>
-    </tr>
+        <td>'.$val['pertanyaan'].'</td>
+    <tr>
+
     ';
 }
 
-if($data_table == ""){
-    $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
+if ($data_table == "") {
+    $data_table = '<tr><td colspan=2 style="color:red"><center><b>DATA BELUM TERSEDIA</b></center></td><tr>';
 }
+
 
 ?>
 
@@ -57,7 +58,7 @@ if($data_table == ""){
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="view.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book-reader"></i>
                 </div>
@@ -73,14 +74,6 @@ if($data_table == ""){
                     <i class="fas fa-fw fa-table"></i>
                     <span>Survey</span></a>
             </li>
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="create.php">
-                    <i class="fas fa-fw fa-pen"></i>
-                    <span>Buat Survey</span></a>
-            </li>
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -129,7 +122,10 @@ if($data_table == ""){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    
+                    <!-- Page Heading -->
+                    <h2 class="h3 mb-2 text-gray-900">Judul</h2>
+                    <p class="h5 mb-5 text-danger"><?= $judul ?></p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -141,14 +137,12 @@ if($data_table == ""){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th width="70%">Judul Survey</th>
-                                            <th>Aksi</th>
+                                            <th width="75%">Judul Survey</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>Judul Survey</th>
-                                            <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -200,7 +194,33 @@ if($data_table == ""){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" href="../logout.php">Logout</a>
+                    <a class="btn btn-danger" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Pertanyaan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <input type="text" id="pertanyaanModal" name="pertanyaan" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Submit</button>
                 </div>
             </div>
         </div>
@@ -222,7 +242,6 @@ if($data_table == ""){
 
     <!-- Page level custom scripts -->
     <script src="../../assets/js/demo/datatables-demo.js"></script>
-
 </body>
 
 </html>

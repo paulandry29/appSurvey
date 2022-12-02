@@ -1,6 +1,6 @@
 <?php
 
-include_once '../../functions/adminFunction.php';
+include_once '../../functions/kaprogdiFunction.php';
 
 $data_table="";
 $data = getSurvey();
@@ -10,9 +10,7 @@ foreach($data as $key => $val){
         <td>'.$val['judul'].'</td>
         <td>
             <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
-            <a href="tambahPertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
-            <a href="#" class="btn btn-warning">Edit</a> 
-            <a href="deleteSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Hapus
+            <a href="pertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
         </td>
     </tr>
     ';
@@ -73,14 +71,6 @@ if($data_table == ""){
                     <i class="fas fa-fw fa-table"></i>
                     <span>Survey</span></a>
             </li>
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="create.php">
-                    <i class="fas fa-fw fa-pen"></i>
-                    <span>Buat Survey</span></a>
-            </li>
-
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -200,7 +190,7 @@ if($data_table == ""){
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger" href="../logout.php">Logout</a>
+                    <a class="btn btn-danger" href="logout.php">Logout</a>
                 </div>
             </div>
         </div>

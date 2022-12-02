@@ -431,4 +431,27 @@ function getOnePertanyaan($id){
     return $hasil;
 }
 
+function getSumPertanyaan($id){
+    global $con;
+    $hasil = 0;
+    $sql = "SELECT COUNT(*) AS count FROM pertanyaan WHERE id_survey = :id";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            foreach($rs as $val){
+                $hasil = $val['count'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getSumPertanyaan = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
 ?>
