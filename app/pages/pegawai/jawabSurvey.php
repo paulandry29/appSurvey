@@ -1,24 +1,35 @@
 <?php
 
-include_once '../../functions/kaprogdiFunction.php';
+require_once '../../functions/pegawaiFunction.php';
 
-$data_table="";
-$data = getSurvey();
-foreach($data as $key => $val){
-    $data_table .='
-    <tr>
-        <td>'.$val['judul'].'</td>
-        <td>
-            <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
-            <a href="pertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
-        </td>
-    </tr>
-    ';
+$id = $_GET['id_survey'];
+$id_user = $_SESSION['id'];
+
+if (isset($_POST['submit'])) {
+
+    createRespon($id_user, $id);
+
+    $id_respon = getOneIdRespon($id_user, $id);
+
+    $count = getCountPertanyaan($id);
+
+    for ($i=1; $i <= $count ; $i++) {
+        ${"id" . $i} = $_POST['id' . $i];
+    }
+
+    for ($j=1; $j <= $count ; $j++) {
+        ${"jawaban" . $j} = $_POST['jawaban' . $j];
+    }
+
+    for ($k=1; $k <= $count ; $k++) {
+        inputJawaban(${"jawaban" . $k}, $id_respon, ${"id" . $k});
+    }
+
+    header("location:view.php");
+
 }
 
-if($data_table == ""){
-    $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
-}
+$pertanyaan = getPertanyaan($id);
 
 ?>
 
@@ -64,7 +75,7 @@ if($data_table == ""){
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            
+
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
                 <a class="nav-link" href="view.php">
@@ -121,32 +132,57 @@ if($data_table == ""){
                 <div class="container-fluid">
 
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-danger">Survey</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th width="70%">Judul Survey</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Judul Survey</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <?= $data_table ?>
-                                    </tbody>
-                                </table>
+                     <!-- Content Row -->
+                     <div class="row">
+
+                        <!-- Border Left Utilities -->
+                        <div class="col-lg-12">
+
+                            <form method="post">
+
+                            <?php $i = 1;foreach ($pertanyaan as $key => $val) {?>
+
+                            <div class="card mb-3 border-left-danger">
+                                <div class="card-body justify-content-between">
+
+                                    <div class="text-gray-800">
+                                        <?=$val['pertanyaan']?>
+                                        <input type="text" name="id<?=$i?>" value="<?=$val['id']?>" hidden>
+                                    </div>
+
+                                    <div class="text-gray-800">
+                                        <div class="form-check">
+                                            <input type="radio" name="jawaban<?=$i?>" value="5" id="r5" class="form-check-input"/>
+                                            <label class="form-check-label" for="r5">Sangat Baik</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="jawaban<?=$i?>" value="4" id="r4" class="form-check-input"/>
+                                            <label class="form-check-label" for="r4">Baik</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="jawaban<?=$i?>" value="3" id="r3" class="form-check-input"/>
+                                            <label class="form-check-label" for="r3">Cukup</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="jawaban<?=$i?>" value="2" id="r2" class="form-check-input"/>
+                                            <label class="form-check-label" for="r2">Kurang</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="jawaban<?=$i?>" value="1" id="r1" class="form-check-input"/>
+                                            <label class="form-check-label" for="r1">Sangat Kurang</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <?php $i++;}?>
+
+                            <button type="submit" class="btn btn-danger" name="submit">Submit</button>
+
+                            </form>
+
                         </div>
+
                     </div>
 
                 </div>
@@ -205,7 +241,7 @@ if($data_table == ""){
 
     <!-- Custom scripts for all pages-->
     <script src="../../assets/js/sb-admin-2.min.js"></script>
-    
+
     <!-- Page level plugins -->
     <script src="../../assets/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>

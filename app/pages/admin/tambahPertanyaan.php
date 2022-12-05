@@ -20,8 +20,7 @@ foreach($data as $key => $val){
     <tr>
         <td class="pertanyaan">'.$val['pertanyaan'].'</td>
         <td hidden class="id">'.$val['id'].'</td>
-        <td> 
-            <a class="btn btn-success btn_edit"> Edit </a> 
+        <td class="text-center"> 
             <a class="btn btn-danger" href="deletePertanyaan.php?id_pertanyaan='.$val['id'].'&&id_survey='.$id.'">Delete</a>
         </td>
     <tr>
@@ -156,14 +155,14 @@ if ($data_table == "") {
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th width="75%">Judul Survey</th>
-                                            <th>Aksi</th>
+                                            <th width="90%">Judul Survey</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>Judul Survey</th>
-                                            <th>Aksi</th>
+                                            <th class="text-center">Aksi</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -207,12 +206,12 @@ if ($data_table == "") {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Yakin mau keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Pilih "Logout" dibawah jika ingin keluar dari Aplikasi Survey.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-danger" href="../logout.php">Logout</a>

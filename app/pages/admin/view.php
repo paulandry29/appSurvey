@@ -11,7 +11,6 @@ foreach($data as $key => $val){
         <td>
             <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
             <a href="tambahPertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
-            <a href="#" class="btn btn-warning">Edit</a> 
             <a href="deleteSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Hapus
         </td>
     </tr>
@@ -197,7 +196,7 @@ if($data_table == ""){
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Pilih "Logout" dibawah jika ingin keluar dari Aplikasi Survey.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-danger" href="../logout.php">Logout</a>

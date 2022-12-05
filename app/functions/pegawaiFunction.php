@@ -39,92 +39,23 @@ function getPertanyaan($id){
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $rs = $stmt->fetchAll();
 
-        if($rs != null){
+        if ($rs != null) {
             $i=0;
             foreach($rs as $val){
-                $hasil[$i]['pertanyaan']    =  $val['pertanyaan'];
-                $hasil[$i]['id']            =  $val['id_pertanyaan'];
+                $hasil[$i]['pertanyaan']    = $val['pertanyaan'];
+                $hasil[$i]['id']            = $val['id_pertanyaan'];
                 $i++;
             }
         }
+
     } catch (Exception $e) {
         echo 'Error getPertanyaan = '.$e->getMessage();
     }
-    return $hasil;
-}
-
-function getSumJawaban($id, $jawaban){
-    global $con;
-    $hasil = 0;
-    $sql = "SELECT COUNT(*) AS count FROM jawaban WHERE id_pertanyaan = :id AND jawaban = :num";
-
-    try {
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->bindValue(':num', $jawaban, PDO::PARAM_INT);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $rs = $stmt->fetchAll();
-
-        if ($rs != null) {
-            foreach($rs as $val){
-                $hasil = $val['count'];
-            }
-        }
-    } catch (Exception $e) {
-        echo 'Error getSumJawaban = '.$e->getMessage();
-    }
-    return $hasil;
-}
-
-function getOneJudul($id){
-    global $con;
-    $hasil = "";
-
-    try {
-        $sql = "SELECT * FROM survey WHERE id_survey = :id";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue('id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $rs = $stmt->fetchAll();
-
-        if ($rs != null) {
-            foreach($rs as $val){
-                $hasil= $val['judul_survey'];
-            }
-        }
-    } catch (Exception $e) {
-        echo 'Error getOneJudul = '.$e->getMessage();
-    }
 
     return $hasil;
 }
 
-function getSumRespon($id){
-    global $con;
-    $hasil = 0;
-    $sql = "SELECT COUNT(*) AS count FROM respon WHERE id_survey = :id";
-
-    try {
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $rs = $stmt->fetchAll();
-
-        if ($rs != null) {
-            foreach($rs as $val){
-                $hasil = $val['count'];
-            }
-        }
-    } catch (Exception $e) {
-        echo 'Error getSumRespon = '.$e->getMessage();
-    }
-    return $hasil;
-}
-
-function getSumPertanyaan($id){
+function getCountPertanyaan($id){
     global $con;
     $hasil = 0;
     $sql = "SELECT COUNT(*) AS count FROM pertanyaan WHERE id_survey = :id";
@@ -142,9 +73,64 @@ function getSumPertanyaan($id){
             }
         }
     } catch (Exception $e) {
-        echo 'Error getSumPertanyaan = '.$e->getMessage();
+        echo 'Error getCountPertanyaan = '.$e->getMessage();
     }
     return $hasil;
+}
+
+function createRespon($id_user, $id){
+    global $con;
+    $sql = "INSERT INTO respon VALUES('', :id_user, :id)";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error createRespon = ' . $e->getMessage();
+    }
+}
+
+function getOneIdRespon($id_user, $id){
+    global $con;
+    $hasil = "";
+    $sql = "SELECT id_respon FROM respon 
+                WHERE id_user = :id_user AND id_survey = :id 
+                ORDER BY id_respon DESC LIMIT 1";
+    
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue('id_user', $id_user, PDO::PARAM_INT);
+        $stmt->bindValue('id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            foreach ($rs as $val) {
+                $hasil = $val['id_respon'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getOneIdRespon = ' . $e->getMessage();
+    }
+    return $hasil;
+}
+
+function inputJawaban($jawaban, $id_respon, $id_pertanyaan){
+    global $con;
+    $sql = "INSERT INTO jawaban VALUES('', :jawaban, :id_respon, :id_pertanyaan)";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':jawaban', $jawaban, PDO::PARAM_STR);
+        $stmt->bindValue(':id_respon', $id_respon, PDO::PARAM_INT);
+        $stmt->bindValue(':id_pertanyaan', $id_pertanyaan, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error insertJawaban = ' . $e->getMessage();
+    }
 }
 
 ?>

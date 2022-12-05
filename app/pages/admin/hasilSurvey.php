@@ -51,12 +51,12 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
     $data_table2 .= '
 
 <tr>
-    <td>Rata-rata</td>
-    <td>' . round((($jsb / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
-    <td>' . round((($jb / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
-    <td>' . round((($jc / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
-    <td>' . round((($jk / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
-    <td>' . round((($jsk / $jPertanyaan) * 100) / $jRespon, 2) . '%</td>
+    <th>Rata-rata</td>
+    <th>' . round((($jsb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jc / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jsk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
 </tr>
 
 ';
@@ -195,9 +195,12 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
                                            <th>Sangat Kurang</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <?=$data_table2?>
+                                    </tfoot>
                                     <tbody>
                                         <?=$data_table?>
-                                        <?=$data_table2?>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -237,12 +240,12 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Yakin mau keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Pilih "Logout" dibawah jika ingin keluar dari Aplikasi Survey.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-danger" href="../logout.php">Logout</a>

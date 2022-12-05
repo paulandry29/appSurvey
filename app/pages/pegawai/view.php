@@ -1,6 +1,6 @@
 <?php
 
-include_once '../../functions/kaprogdiFunction.php';
+include_once '../../functions/mahasiswaFunction.php';
 
 $data_table="";
 $data = getSurvey();
@@ -9,8 +9,7 @@ foreach($data as $key => $val){
     <tr>
         <td>'.$val['judul'].'</td>
         <td>
-            <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
-            <a href="pertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
+            <a href="jawabSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Jawab</a>
         </td>
     </tr>
     ';

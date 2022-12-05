@@ -1,0 +1,19 @@
+
+MAHASISWA
+NoInduk     : 672018178 
+Password    : paulandry29
+
+NoInduk     : 682018175 
+Password    : karlos
+
+PEGAWAI
+NoInduk     : 301 
+Password    : 301
+
+KAPROGDI
+NoInduk     : 001 
+Password    : fti
+
+ADMIN
+NoInduk     : 101 
+Password    : admin

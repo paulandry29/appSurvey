@@ -4,28 +4,60 @@ include_once '../../functions/kaprogdiFunction.php';
 
 $id = $_GET['id_survey'];
 
-$data_table="";
+$data_table = "";
 $data = getPertanyaan($id);
-foreach($data as $key => $val){ 
+$jsb = 0;
+$jb = 0;
+$jc = 0;
+$jk = 0;
+$jsk = 0;
+foreach ($data as $key => $val) {
     $sk = getSumJawaban($val['id'], 1);
     $k = getSumJawaban($val['id'], 2);
     $c = getSumJawaban($val['id'], 3);
     $b = getSumJawaban($val['id'], 4);
     $sb = getSumJawaban($val['id'], 5);
-    $data_table .='
+    $data_table .= '
     <tr>
-        <td>'.$val['pertanyaan'].'</td>
-        <td>'.$sb.'</td>
-        <td>'.$b.'</td>
-        <td>'.$c.'</td>
-        <td>'.$k.'</td>
-        <td>'.$sk.'</td>
+        <td>' . $val['pertanyaan'] . '</td>
+        <td>' . $sb . '</td>
+        <td>' . $b . '</td>
+        <td>' . $c . '</td>
+        <td>' . $k . '</td>
+        <td>' . $sk . '</td>
     </tr>
     ';
+    $jsb += $sb;
+    $jb += $b;
+    $jc += $c;
+    $jk += $k;
+    $jsk += $sk;
 }
 
 if ($data_table == "") {
-    $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
+    $data_table = '<tr><td colspan=6 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
+}
+
+$jRespon = getSumRespon($id);
+$jPertanyaan = getSumPertanyaan($id);
+
+$data_table2 = "";
+
+if ($jRespon == 0 || $jPertanyaan == 0) {
+    $data_table2 = "";
+} else {
+    $data_table2 .= '
+
+<tr>
+    <th>Rata-rata</td>
+    <th>' . round((($jsb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jc / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+    <th>' . round((($jsk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+</tr>
+
+';
 }
 
 ?>
@@ -140,21 +172,25 @@ if ($data_table == "") {
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
+                                <thead>
                                         <tr>
                                             <th width="60%" rowspan="2">Pertanyaan</th>
                                             <th colspan="5"><center>Jawaban</center></th>
                                         </tr>
                                         <tr>
-                                           <th>Sangat Baik</th> 
-                                           <th>Baik</th> 
-                                           <th>Cukup</th> 
-                                           <th>Kurang</th> 
-                                           <th>Sangat Kurang</th> 
+                                           <th>Sangat Baik</th>
+                                           <th>Baik</th>
+                                           <th>Cukup</th>
+                                           <th>Kurang</th>
+                                           <th>Sangat Kurang</th>
                                         </tr>
                                     </thead>
+                                    <tfoot>
+                                        <?=$data_table2?>
+                                    </tfoot>
                                     <tbody>
-                                        <?= $data_table ?>
+                                        <?=$data_table?>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -194,12 +230,12 @@ if ($data_table == "") {
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Yakin mau keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Pilih "Logout" dibawah jika ingin keluar dari Aplikasi Survey.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-danger" href="../logout.php">Logout</a>
