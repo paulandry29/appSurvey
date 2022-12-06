@@ -2,22 +2,22 @@
 
 include_once '../../functions/adminFunction.php';
 
-$data_table="";
+$data_table = "";
 $data = getSurvey();
-foreach($data as $key => $val){
-    $data_table .='
+foreach ($data as $key => $val) {
+    $data_table .= '
     <tr>
-        <td>'.$val['judul'].'</td>
+        <td>' . $val['judul'] . '</td>
         <td>
-            <a href="hasilSurvey.php?id_survey='.$val['id'].'" class="btn btn-primary">Hasil Survey</a>
-            <a href="tambahPertanyaan.php?id_survey='.$val['id'].'" class="btn btn-success">Pertanyaan</a>
-            <a href="deleteSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Hapus
+            <a href="hasilSurvey.php?id_survey=' . $val['id'] . '" class="btn btn-primary">Hasil Survey</a>
+            <a href="tambahPertanyaan.php?id_survey=' . $val['id'] . '" class="btn btn-success">Pertanyaan</a>
+            <a href="deleteSurvey.php?id_survey=' . $val['id'] . '" class="btn btn-danger">Hapus
         </td>
     </tr>
     ';
 }
 
-if($data_table == ""){
+if ($data_table == "") {
     $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
 }
 
@@ -56,7 +56,7 @@ if($data_table == ""){
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book-reader"></i>
                 </div>
@@ -65,19 +65,21 @@ if($data_table == ""){
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            
+
             <!-- Nav Item - Tables -->
             <li class="nav-item active">
                 <a class="nav-link" href="view.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Survey</span></a>
+                    <span>Survey</span>
+                </a>
             </li>
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="create.php">
                     <i class="fas fa-fw fa-pen"></i>
-                    <span>Buat Survey</span></a>
+                    <span>Buat Survey</span>
+                </a>
             </li>
 
 
@@ -107,6 +109,17 @@ if($data_table == ""){
                             <i class="fa fa-bars"></i>
                         </button>
                     </form>
+
+                    <!-- Topbar Route -->
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="nav-item">
+                            <span class="nav-link">
+                                <b class="mr-2 d-none d-lg-inline text-gray-800">Admin</b>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="view.php" class="nav-link text-danger"><b>View</b></a>
+                            </span>
+                        </div>
+                    </div>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -151,7 +164,7 @@ if($data_table == ""){
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <?= $data_table ?>
+                                        <?=$data_table?>
                                     </tbody>
                                 </table>
                             </div>
@@ -214,7 +227,7 @@ if($data_table == ""){
 
     <!-- Custom scripts for all pages-->
     <script src="../../assets/js/sb-admin-2.min.js"></script>
-    
+
     <!-- Page level plugins -->
     <script src="../../assets/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>

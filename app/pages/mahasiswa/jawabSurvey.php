@@ -66,7 +66,7 @@ $pertanyaan = getPertanyaan($id);
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book-reader"></i>
                 </div>
@@ -110,6 +110,18 @@ $pertanyaan = getPertanyaan($id);
                         </button>
                     </form>
 
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="nav-item">
+                            <span class="nav-link">
+                                <b class="mr-2 d-none d-lg-inline text-gray-800">Mahasiswa</b>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="view.php" class="nav-link text-danger"><b>Survey</b></a>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="jawabSurvey.php" class="nav-link text-danger"><b>Jawab Survey</b></a>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -142,11 +154,11 @@ $pertanyaan = getPertanyaan($id);
 
                             <?php $i = 1;foreach ($pertanyaan as $key => $val) {?>
 
-                            <div class="card mb-3 border-left-danger">
+                            <div class="card mb-4">
                                 <div class="card-body justify-content-between">
 
                                     <div class="text-gray-800">
-                                        <?=$val['pertanyaan']?>
+                                        <p><?=$val['pertanyaan']?></p>
                                         <input type="text" name="id<?=$i?>" value="<?=$val['id']?>" hidden>
                                     </div>
 
@@ -190,6 +202,8 @@ $pertanyaan = getPertanyaan($id);
 
             </div>
             <!-- End of Main Content -->
+
+            <br>
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

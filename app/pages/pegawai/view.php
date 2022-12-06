@@ -54,7 +54,7 @@ if($data_table == ""){
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book-reader"></i>
                 </div>
@@ -98,6 +98,16 @@ if($data_table == ""){
                         </button>
                     </form>
 
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="nav-item">
+                            <span class="nav-link">
+                                <b class="mr-2 d-none d-lg-inline text-gray-800">Mahasiswa</b>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="view.php" class="nav-link text-danger"><b>Survey</b></a>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -130,7 +140,7 @@ if($data_table == ""){
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th width="70%">Judul Survey</th>
+                                            <th width="85%">Judul Survey</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>

@@ -95,7 +95,7 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="view.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-book-reader"></i>
                 </div>
@@ -139,6 +139,18 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
                         </button>
                     </form>
 
+                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="nav-item">
+                            <span class="nav-link">
+                                <b class="mr-2 d-none d-lg-inline text-gray-800">Kaprogdi</b>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="view.php" class="nav-link text-danger"><b>Survey</b></a>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="hasilSurvey.php" class="nav-link text-danger"><b>Hasil Survey</b></a>
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -163,6 +175,10 @@ if ($jRespon == 0 || $jPertanyaan == 0) {
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800"></h1>
                     <p class="h4 mb-4 text-danger">Jumlah Responden <?= getSumRespon($id) ?></p>
+
+                    <div class="d-flex flex-row-reverse mb-4">
+                        <a href="exportExcel.php?id_survey=<?=$id?>" target="_blank" rel="noopener noreferrer" class="btn btn-success">Export</a>
+                    </div>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
