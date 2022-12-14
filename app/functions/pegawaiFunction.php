@@ -133,4 +133,27 @@ function inputJawaban($jawaban, $id_respon, $id_pertanyaan){
     }
 }
 
+function checkJawab($id_survey, $id_user){
+    global $con;
+    $hasil = false;
+    $sql = "SELECT id_respon FROM respon WHERE id_user = :id_user AND id_survey = :id_survey";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id_survey', $id_survey, PDO::PARAM_INT);
+        $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $hasil = true;
+        }
+
+    } catch (Exception $e) {
+        echo 'Error checkJawab = ' . $e->getMessage();
+    }
+    return $hasil;
+}
+
 ?>

@@ -2,6 +2,12 @@
 
 require_once '../../functions/adminFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'admin') {
+    header("location: ../login.php");
+}
+
 $id = $_GET['id_survey'];
 
 if (isset($_POST['submit'])) {

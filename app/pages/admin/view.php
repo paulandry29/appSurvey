@@ -2,6 +2,12 @@
 
 include_once '../../functions/adminFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'admin') {
+    header("location: ../login.php");
+}
+
 $data_table = "";
 $data = getSurvey();
 foreach ($data as $key => $val) {
@@ -123,9 +129,7 @@ if ($data_table == "") {
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
                         <div class="topbar-divider d-none d-sm-block"></div>
-
                         <!-- Nav Item - User Information -->
                         <li class="nav-item">
                             <a class="nav-link" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
@@ -133,7 +137,6 @@ if ($data_table == "") {
                                 <i class="fas fa-sign-out-alt fa-fw"></i>
                             </a>
                         </li>
-
                     </ul>
 
                 </nav>
@@ -141,7 +144,6 @@ if ($data_table == "") {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

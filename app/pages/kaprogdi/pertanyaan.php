@@ -2,6 +2,12 @@
 
 require_once '../../functions/kaprogdiFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'kaprogdi') {
+    header("location: ../login.php");
+}
+
 $id = $_GET['id_survey'];
 
 $judul = getOneJudul($id);

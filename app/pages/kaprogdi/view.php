@@ -2,6 +2,12 @@
 
 include_once '../../functions/kaprogdiFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'kaprogdi') {
+    header("location: ../login.php");
+}
+
 $data_table="";
 $data = getSurvey();
 foreach($data as $key => $val){

@@ -2,6 +2,12 @@
 
 include_once "../../functions/adminFunction.php";
 
+if (!isset($_SESSION['privilege'])) {
+    header("location: ../login.php");
+} elseif ($_SESSION['privilege'] != 'admin') {
+    header("location: ../login.php");
+}
+
 if (isset($_POST['submit'])) {
 
     $user = $_SESSION['id'];
@@ -14,23 +20,34 @@ if (isset($_POST['submit'])) {
 
 }
 
-$data_table='';
+if(isset($_POST['edit'])) {
+
+    $id = $_POST['id'];
+    $editedJudul = $_POST['judul'];
+
+    updateSurveySem($id, $editedJudul);
+
+    header("location:create.php");
+}
+
+$data_table = '';
 $data = getJudulSem();
-foreach($data as $key => $val){
-    $data_table .='
+foreach ($data as $key => $val) {
+    $data_table .= '
     <tr>
-        <td>'.$val['judul'].'</td>
+        <td>' . $val['judul'] . '</td>
+        <td hidden>'.$val['id'].'</td> 
         <td>
-            <a class="btn btn-primary" href="tambahPertanyaanSem.php?id_survey='.$val['id'].'">Pertanyaan </a>
-            <a class="btn btn-success" href="publish.php?id_survey='.$val['id'].'">Publikasi </a> 
-            <a class="btn btn-warning" href="#"> Edit </a>
-            <a class="btn btn-danger" href="deleteSurveySem.php?id_survey='.$val['id'].'">Hapus
+            <a class="btn btn-primary" href="tambahPertanyaanSem.php?id_survey=' . $val['id'] . '">Pertanyaan </a>
+            <a class="btn btn-success" href="publish.php?id_survey=' . $val['id'] . '">Publikasi </a>
+            <button class="btn btn-warning editJudul"  data-toggle="modal" data-target="#editModal"> Edit </button>
+            <a class="btn btn-danger" href="deleteSurveySem.php?id_survey=' . $val['id'] . '">Hapus
         </td>
     </tr>
     ';
 }
 
-if($data_table == ""){
+if ($data_table == "") {
     $data_table = '<tr><td colspan=2 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
 }
 
@@ -58,6 +75,11 @@ if($data_table == ""){
     <!-- Custom styles for this page -->
     <link href="../../assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    <script>
+
+    </script>
+    
+
 </head>
 
 <body id="page-top">
@@ -78,7 +100,7 @@ if($data_table == ""){
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-            
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="view.php">
@@ -164,9 +186,9 @@ if($data_table == ""){
 
                                         <div class="form-group">
                                             <!-- <input type="text" name="judul" class="form-control"> -->
-                                            <textarea name="judul" cols="20" rows="10" class="form-control" ></textarea>
+                                            <textarea name="judul" cols="20" rows="10" class="form-control" id="textarea"></textarea>
                                         </div>
-                                        
+
                                         <button type="submit" name="submit" class="btn btn-danger">Tambah</button>
 
                                     </form>
@@ -189,15 +211,15 @@ if($data_table == ""){
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        <?=$data_table?>
+                                    </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>Judul Survey</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </tfoot>
-                                    <tbody>
-                                        <?= $data_table ?>
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -250,6 +272,35 @@ if($data_table == ""){
         </div>
     </div>
 
+    <!-- Edit Modal-->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Judul</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="id" id="id">
+                            <label for="judul">Judul</label>
+                            <input type="text" class="form-control" name="judul" required id="judul">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-danger" name="edit">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -259,13 +310,16 @@ if($data_table == ""){
 
     <!-- Custom scripts for all pages-->
     <script src="../../assets/js/sb-admin-2.min.js"></script>
-    
+
     <!-- Page level plugins -->
     <script src="../../assets/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="../../assets/js/demo/datatables-demo.js"></script>
+
+    <!-- Custom -->
+    <script src="../../assets/js/custom.js"></script>
 
 </body>
 

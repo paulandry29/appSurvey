@@ -2,11 +2,27 @@
 
 require_once '../../functions/adminFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'admin') {
+    header("location: ../login.php");
+}
+
 $id = $_GET['id_survey'];
 
 if (isset($_POST['submit'])) {
     $pertanyaan = $_POST['pertanyaan'];
     tambahPertanyaanSem($pertanyaan, $id);
+    header('location:tambahPertanyaanSem.php?id_survey='.$id.'');
+}
+
+if(isset($_POST['edit'])) {
+
+    $idp = $_POST['id'];
+    $editedJudul = $_POST['judul'];
+
+    updatePertanyaanSem($idp, $editedJudul);
+
     header('location:tambahPertanyaanSem.php?id_survey='.$id.'');
 }
 
@@ -18,8 +34,9 @@ foreach($data as $key => $val){
     $data_table .='
     <tr>
         <td>'.$val['pertanyaan'].'</td>
+        <td hidden>'.$val['id'].'</td> 
         <td>
-            <a class="btn btn-success"> Edit </a>
+            <a class="btn btn-success editJudul" data-toggle="modal" data-target="#editModal"> Edit </a>
             <a class="btn btn-danger" href="deletePertanyaanSem.php?id_pertanyaan='.$val['id'].'&&id_survey='.$id.'">Delete</a>
         </td>
     </tr> 
@@ -180,7 +197,7 @@ if ($data_table == "") {
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-danger">Survey Sementara</h6>
+                            <h6 class="m-0 font-weight-bold text-danger">Pertanyaan</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -252,6 +269,33 @@ if ($data_table == "") {
         </div>
     </div>
 
+    <!-- Edit Modal-->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Pertanyaan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="id" id="id">
+                            <label for="judul">Pertanyaan</label>
+                            <input type="text" class="form-control" name="judul" required id="judul">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-danger" name="edit">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../../assets/vendor/jquery/jquery.min.js"></script>
     <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -268,6 +312,9 @@ if ($data_table == "") {
 
     <!-- Page level custom scripts -->
     <script src="../../assets/js/demo/datatables-demo.js"></script>
+
+    <!-- Custom -->
+    <script src="../../assets/js/custom.js"></script>
 
 </body>
 

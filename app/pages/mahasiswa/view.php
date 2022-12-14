@@ -2,15 +2,25 @@
 
 include_once '../../functions/mahasiswaFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'mahasiswa') {
+    header("location: ../login.php");
+}
+
+$id_user = $_SESSION['id'];
+
 $data_table="";
 $data = getSurvey();
 foreach($data as $key => $val){
+    $check = checkJawab($val['id'], $id_user);
+    $rsCheck = ($check == true) ? '<button class="btn btn-success" disabled>Dijawab</button>' : '<a href="jawabSurvey.php?id_survey=' . $val['id'] . '" class="btn btn-danger">Jawab</a>';
     $data_table .='
     <tr>
         <td>'.$val['judul'].'</td>
-        <td>
-            <a href="jawabSurvey.php?id_survey='.$val['id'].'" class="btn btn-danger">Jawab</a>
-        </td>
+        <td>'.
+            $rsCheck
+        .'</td>
     </tr>
     ';
 }

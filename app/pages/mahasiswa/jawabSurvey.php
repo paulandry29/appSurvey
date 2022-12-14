@@ -2,6 +2,12 @@
 
 require_once '../../functions/mahasiswaFunction.php';
 
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'mahasiswa') {
+    header("location: ../login.php");
+}
+
 $id = $_GET['id_survey'];
 $id_user = $_SESSION['id'];
 
@@ -164,23 +170,23 @@ $pertanyaan = getPertanyaan($id);
 
                                     <div class="text-gray-800">
                                         <div class="form-check">
-                                            <input type="radio" name="jawaban<?=$i?>" value="5" id="r5" class="form-check-input"/>
+                                            <input type="radio" name="jawaban<?=$i?>" value="5" id="r5" class="form-check-input" required/>
                                             <label class="form-check-label" for="r5">Sangat Baik</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="radio" name="jawaban<?=$i?>" value="4" id="r4" class="form-check-input"/>
+                                            <input type="radio" name="jawaban<?=$i?>" value="4" id="r4" class="form-check-input" required/>
                                             <label class="form-check-label" for="r4">Baik</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="radio" name="jawaban<?=$i?>" value="3" id="r3" class="form-check-input"/>
+                                            <input type="radio" name="jawaban<?=$i?>" value="3" id="r3" class="form-check-input" required/>
                                             <label class="form-check-label" for="r3">Cukup</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="radio" name="jawaban<?=$i?>" value="2" id="r2" class="form-check-input"/>
+                                            <input type="radio" name="jawaban<?=$i?>" value="2" id="r2" class="form-check-input" required/>
                                             <label class="form-check-label" for="r2">Kurang</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="radio" name="jawaban<?=$i?>" value="1" id="r1" class="form-check-input"/>
+                                            <input type="radio" name="jawaban<?=$i?>" value="1" id="r1" class="form-check-input" required/>
                                             <label class="form-check-label" for="r1">Sangat Kurang</label>
                                         </div>
                                     </div>

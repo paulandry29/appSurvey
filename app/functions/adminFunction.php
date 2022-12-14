@@ -454,4 +454,36 @@ function getSumPertanyaan($id){
     return $hasil;
 }
 
+function updateSurveySem($id, $judul){
+    global $con;
+    $sql = "UPDATE temp_survey
+                SET judul_survey = :judul
+                WHERE id_survey = :id_survey";
+    
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id_survey', $id, PDO::PARAM_STR);
+        $stmt->bindValue(':judul', $judul, PDO::PARAM_STR);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error updateSurveySem = ' . $e->getMessage();
+    }
+}
+
+function updatePertanyaanSem($id, $pertanyaan){
+    global $con;
+    $sql = "UPDATE temp_pertanyaan
+                SET pertanyaan = :pertanyaan
+                WHERE id_pertanyaan = :id_pertanyaan";
+    
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id_pertanyaan', $id, PDO::PARAM_STR);
+        $stmt->bindValue(':pertanyaan', $pertanyaan, PDO::PARAM_STR);
+        $stmt->execute();
+    } catch (Exception $e) {
+        echo 'Error updatePertanyaanSem = ' . $e->getMessage();
+    }
+}
+
 ?>

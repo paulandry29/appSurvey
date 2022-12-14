@@ -2,7 +2,11 @@
 
 include_once '../../functions/adminFunction.php';
 
-// error_reporting(0);
+if(!isset($_SESSION['privilege'])){
+    header("location: ../login.php");
+}elseif ($_SESSION['privilege'] != 'admin') {
+    header("location: ../login.php");
+}
 
 $id = $_GET['id_survey'];
 

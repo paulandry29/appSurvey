@@ -86,7 +86,7 @@ if (isset($_SESSION['user'])) {
                                     <hr>
 
                                     <div class="text-center">
-                                        <a class="small" href="#">Lupa password?</a>
+                                        <a class="small" href="forgotPasswordInfo.php">Lupa password?</a>
                                     </div>
 
                                 </form>
@@ -105,13 +105,5 @@ if (isset($_SESSION['user'])) {
 </body>
 
 </html>
-
-<!-- <form method="post">
-    <input type="text" name="user" placeholder="Nomor Induk"><br>
-    <input type="password" name="pass" placeholder="Password"><br>
-    <button type="submit" name="submit">Login</button>
-
-</form>
-<a href="register.php"><button type="submit">Register</button></a> -->
 
 <?php }?>
