@@ -30,6 +30,22 @@ if(isset($_POST['edit'])) {
     header("location:create.php");
 }
 
+if (isset($_POST['publish'])) {
+    $id = $_POST['publishid'];
+    $pilihPublish = $_POST['pilihpublish'];
+    $publishJudul = $_POST['publishjudul'];
+    $id_user = $_SESSION['id'];
+    
+    publishJudul($publishJudul, $pilihPublish, $id_user);
+
+    $id_survey = getIdSurvey();
+
+    publishPertanyaan($id, $id_survey);    
+
+    deleteSurveySem($id);
+
+}
+
 $data_table = '';
 $data = getJudulSem();
 foreach ($data as $key => $val) {
@@ -39,8 +55,8 @@ foreach ($data as $key => $val) {
         <td hidden>'.$val['id'].'</td> 
         <td>
             <a class="btn btn-primary" href="tambahPertanyaanSem.php?id_survey=' . $val['id'] . '">Pertanyaan </a>
-            <a class="btn btn-success" href="publish.php?id_survey=' . $val['id'] . '">Publikasi </a>
-            <button class="btn btn-warning editJudul"  data-toggle="modal" data-target="#editModal"> Edit </button>
+            <button class="btn btn-success pilihPublish" data-toggle="modal" data-target="#publishModal"> Publish </button>
+            <button class="btn btn-warning editJudul" data-toggle="modal" data-target="#editModal"> Edit </button>
             <a class="btn btn-danger" href="deleteSurveySem.php?id_survey=' . $val['id'] . '">Hapus
         </td>
     </tr>
@@ -299,6 +315,49 @@ if ($data_table == "") {
         </div>
     </div>
 
+    <!-- Publish Modal-->
+    <div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="POST">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Publikasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="publishid" id="publishid">
+                            <input type="hidden" class="form-control" name="publishjudul" id="publishjudul">
+                            <label>Publish Ke:</label>
+
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="publish1" name="pilihpublish" value="semua" checked>Semua
+                                <label class="form-check-label" for="radio1"></label>
+                            </div>
+
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="publish2" name="pilihpublish" value="mahasiswa">Mahasiswa
+                                <label class="form-check-label" for="radio1"></label>
+                            </div>
+
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="publish3" name="pilihpublish" value="dosen">Dosen
+                                <label class="form-check-label" for="radio1"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                        <button type="submit" class="btn btn-danger" name="publish">Publish</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
     
 
     <!-- Bootstrap core JavaScript-->
@@ -309,7 +368,7 @@ if ($data_table == "") {
     <script src="../../assets/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../../assets/js/sb-admin-2.min.js"></script>
+    <script src="../../assets/js/sb-admin-2.js"></script>
 
     <!-- Page level plugins -->
     <script src="../../assets/vendor/datatables/jquery.dataTables.min.js"></script>
@@ -317,9 +376,6 @@ if ($data_table == "") {
 
     <!-- Page level custom scripts -->
     <script src="../../assets/js/demo/datatables-demo.js"></script>
-
-    <!-- Custom -->
-    <script src="../../assets/js/custom.js"></script>
 
 </body>
 

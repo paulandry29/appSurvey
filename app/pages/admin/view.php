@@ -14,6 +14,7 @@ foreach ($data as $key => $val) {
     $data_table .= '
     <tr>
         <td>' . $val['judul'] . '</td>
+        <td>' . $val['publish'] . '</td>
         <td>
             <a href="hasilSurvey.php?id_survey=' . $val['id'] . '" class="btn btn-primary">Hasil Survey</a>
             <a href="tambahPertanyaan.php?id_survey=' . $val['id'] . '" class="btn btn-success">Pertanyaan</a>
@@ -50,6 +51,7 @@ if ($data_table == "") {
 
     <!-- Custom styles for this page -->
     <link href="../../assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
 
 </head>
 
@@ -155,13 +157,15 @@ if ($data_table == "") {
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th width="70%">Judul Survey</th>
+                                            <th width="65%">Judul Survey</th>
+                                            <th width="10%">Publish</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
                                             <th>Judul Survey</th>
+                                            <th>Publish</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </tfoot>
@@ -240,3 +244,4 @@ if ($data_table == "") {
 </body>
 
 </html>
+

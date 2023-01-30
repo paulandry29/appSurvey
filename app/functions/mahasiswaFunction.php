@@ -5,7 +5,7 @@ require_once 'config.php';
 function getSurvey(){
     global $con;
     $hasil = array();
-    $sql = 'SELECT * FROM survey';
+    $sql = 'SELECT * FROM survey WHERE publish = "semua" OR publish = "mahasiswa"';
 
     try {
         $stmt = $con->prepare($sql);

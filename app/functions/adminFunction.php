@@ -121,7 +121,6 @@ function getPertanyaanSem($id){
     } catch (Exception $e) {
         echo 'Error getPertanyaanSem = '.$e->getMessage();
     }
-
     return $hasil;
 }
 
@@ -137,15 +136,17 @@ function deletePertanyaanSem($id){
     }
 }
 
-function publishJudul($id){
+function publishJudul($judul, $pilihPublish, $user){
     global $con;
-    $sql1 = "INSERT INTO survey(judul_survey, id_user) SELECT temp_survey.judul_survey, temp_survey.id_user FROM temp_survey WHERE temp_survey.id_survey = :id1";
+    $sql1 = "INSERT INTO survey(id_survey, judul_survey, publish, id_user) VALUES('', :judul, :publish, :id_user)";
     try {
         $stmt = $con -> prepare($sql1);
-        $stmt->bindValue(':id1', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':judul', $judul, PDO::PARAM_STR);
+        $stmt->bindValue(':publish', $pilihPublish, PDO::PARAM_STR);
+        $stmt->bindValue(':id_user', $user, PDO::PARAM_INT);
         $stmt->execute();
     } catch (Exception $e) {
-        echo 'Error publish = '.$e->getMessage();
+        echo 'Error publishJudul = '.$e->getMessage();
     }
 }
 
@@ -185,7 +186,7 @@ function publishOnePertanyaan($pertanyaan, $id){
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     } catch (Exception $e) {
-        echo 'Error createSurvey = '.$e->getMessage();
+        echo 'Error publishOnePertanyaan = '.$e->getMessage();
     }
 }
 
@@ -226,6 +227,7 @@ function getSurvey(){
             $i=0;
             foreach($rs as $val){
                 $hasil[$i]['judul'] = $val['judul_survey'];
+                $hasil[$i]['publish'] = $val['publish'];
                 $hasil[$i]['id'] = $val['id_survey'];
 				$i++;    
             }
@@ -278,6 +280,7 @@ function getPertanyaan($id){
 
     return $hasil;
 }
+
 
 function deleteSurvey($id){
     global $con;
@@ -385,6 +388,79 @@ function getSumJawaban($id, $jawaban){
     return $hasil;
 }
 
+function getSumJawabanFilter($id, $jawaban, $publish, $fakultas){
+    global $con;
+    $hasil = 0;
+
+    if ($publish == 5) {
+        $arr = array("3", "4");
+        $in = str_repeat('?,', count($arr) - 1) . '?';
+
+        if ($fakultas == null ) {
+            $op = "OR";
+        }else {
+            $op = "AND";
+        }
+
+        $sql = "SELECT COUNT(*) AS count FROM jawaban
+                    JOIN respon ON jawaban.id_respon = respon.id_respon
+                    JOIN survey ON respon.id_survey = survey.id_survey
+                    JOIN users ON respon.id_user = users.id_user
+                    JOIN progdi ON users.id_progdi = progdi.id_progdi
+                    JOIN fakultas ON progdi.id_fakultas = fakultas.id_fakultas
+                WHERE id_pertanyaan = ? AND jawaban = ? AND (users.privilege IN($in) {$op} fakultas.id_fakultas = ?)";
+
+        try {
+            $stmt = $con->prepare($sql);
+            $params = array_merge([$id, $jawaban], $arr, [$fakultas]);
+            $stmt->execute($params);
+            $rs = $stmt->fetchAll();
+
+            if ($rs != null) {
+                foreach($rs as $val){
+                    $hasil = $val['count'];
+                }
+            }
+        } catch (Exception $e) {
+            echo 'Error getSumJawabanFilter = '.$e->getMessage();
+        }
+        return $hasil;
+    }else {
+        if ($fakultas == null ) {
+            $op = "OR";
+        }else {
+            $op = "AND";
+        }
+
+        $sql = "SELECT COUNT(*) AS count FROM jawaban
+                    JOIN respon ON jawaban.id_respon = respon.id_respon
+                    JOIN survey ON respon.id_survey = survey.id_survey
+                    JOIN users ON respon.id_user = users.id_user
+                    JOIN progdi ON users.id_progdi = progdi.id_progdi
+                    JOIN fakultas ON progdi.id_fakultas = fakultas.id_fakultas
+                WHERE id_pertanyaan = :id AND jawaban = :jawaban AND (users.privilege IN(:publish) {$op} fakultas.id_fakultas = :fakultas)";
+        try {
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':jawaban', $jawaban, PDO::PARAM_STR);
+            $stmt->bindValue(':publish', $publish, PDO::PARAM_STR);
+            $stmt->bindValue(':fakultas', $fakultas, PDO::PARAM_STR);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $rs = $stmt->fetchAll();
+
+            if ($rs != null) {
+                foreach($rs as $val){
+                    $hasil = $val['count'];
+                }
+            }
+        } catch (Exception $e) {
+            echo 'Error getSumJawabanFilter = '.$e->getMessage();
+        }
+        return $hasil;   
+    }
+}
+
 function getSumRespon($id){
     global $con;
     $hasil = 0;
@@ -406,6 +482,76 @@ function getSumRespon($id){
         echo 'Error getSumRespon = '.$e->getMessage();
     }
     return $hasil;
+}
+
+function getSumResponFilter($id, $publish, $fakultas){
+    global $con;
+    $hasil = 0;
+
+    if ($publish == 5) {
+        $arr = array("3", "4");
+        $in = str_repeat('?,', count($arr) - 1) . '?';
+
+        if ($fakultas == null ) {
+            $op = "OR";
+        }else {
+            $op = "AND";
+        }
+        
+        $sql = "SELECT COUNT(*) AS count FROM respon 
+                    JOIN survey ON respon.id_survey = survey.id_survey
+                    JOIN users ON respon.id_user = users.id_user
+                    JOIN progdi ON users.id_progdi = progdi.id_progdi
+                    JOIN fakultas ON progdi.id_fakultas = fakultas.id_fakultas
+                WHERE respon.id_survey = ? AND (users.privilege IN ($in) {$op} fakultas.id_fakultas = ?)";
+
+        try {
+            $stmt = $con->prepare($sql);
+            $params = array_merge([$id], $arr, [$fakultas]);
+            $stmt->execute($params);
+            $rs = $stmt->fetchAll();
+
+            if ($rs != null) {
+                foreach($rs as $val){
+                    $hasil = $val['count'];
+                }
+            }
+        } catch (Exception $e) {
+            echo 'Error getSumResponFilter = '.$e->getMessage();
+        }
+        return $hasil;   
+    }else {
+        if ($fakultas == null ) {
+            $op = "OR";
+        }else {
+            $op = "AND";
+        }
+        $sql = "SELECT COUNT(*) AS count FROM respon 
+                JOIN survey ON respon.id_survey = survey.id_survey
+                JOIN users ON respon.id_user = users.id_user
+                JOIN progdi ON users.id_progdi = progdi.id_progdi
+                JOIN fakultas ON progdi.id_fakultas = fakultas.id_fakultas
+            WHERE respon.id_survey = :id AND (users.privilege IN (:publish) {$op} fakultas.id_fakultas = :fakultas)";
+
+        try {
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->bindValue(':publish', $publish, PDO::PARAM_INT);
+            $stmt->bindValue(':fakultas', $fakultas, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $rs = $stmt->fetchAll();
+
+            if ($rs != null) {
+                foreach($rs as $val){
+                    $hasil = $val['count'];
+                }
+            }
+        } catch (Exception $e) {
+            echo 'Error getSumResponFilter = '.$e->getMessage();
+        }
+        return $hasil;
+    }
 }
 
 function getOnePertanyaan($id){
@@ -484,6 +630,58 @@ function updatePertanyaanSem($id, $pertanyaan){
     } catch (Exception $e) {
         echo 'Error updatePertanyaanSem = ' . $e->getMessage();
     }
+}
+
+function getFakultas(){
+    global $con;
+    $hasil = array();
+
+    try {
+        $sql = "SELECT * FROM fakultas";
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $i=0;
+            foreach($rs as $val){
+                $hasil[$i]['id_fakultas']= $val['id_fakultas'];
+                $hasil[$i]['fakultas']= $val['fakultas'];
+                $i++;
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getFakultas = '.$e->getMessage();
+    }
+
+    return $hasil;
+}
+
+function getProgdi(){
+    global $con;
+    $hasil = array();
+
+    try {
+        $sql = "SELECT * FROM progdi";
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $i=0;
+            foreach($rs as $val){
+                $hasil[$i]['id_progdi']= $val['id_progdi'];
+                $hasil[$i]['progdi']= $val['progdi'];
+                $i++;
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getProgdi = '.$e->getMessage();
+    }
+
+    return $hasil;
 }
 
 ?>
