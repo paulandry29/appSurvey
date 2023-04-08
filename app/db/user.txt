@@ -6,6 +6,13 @@ Password    : paulandry29
 NoInduk     : 682018175 
 Password    : karlos
 
+NoInduk/pass        Nama
+672019001       -> Arya Nugraha
+682020001       -> Widya Ningrum
+692018001       -> Angkasa Putra
+682017001       -> Graha Perkasa Surya
+672018001       -> Sukma Raga Raya
+
 PEGAWAI
 NoInduk     : 301 
 Password    : 301

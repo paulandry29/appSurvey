@@ -9,116 +9,33 @@ if(!isset($_SESSION['privilege'])){
 }
 
 $id = $_GET['id_survey'];
+$id_respon = $_GET['id_respon'];
+
+$nama = getUserByRespon($id_respon);
+
+$data = getJawabanUser($id, $id_respon);
 
 $data_table = "";
 
-$data = getPertanyaan($id);
-$jsb = 0;
-$jb = 0;
-$jc = 0;
-$jk = 0;
-$jsk = 0;
-
-if (isset($_POST['filter'])) {
-    $radiofilter = $_POST['radiofilter'];
-    $fakultas = $_POST['fakultas'];
-    $jRespon = getSumResponFilter($id, $radiofilter, $fakultas);
-
-    foreach ($data as $key => $val) {
-        $sk = getSumJawabanFilter($val['id'], 1, $radiofilter, $fakultas);
-        $k = getSumJawabanFilter($val['id'], 2, $radiofilter, $fakultas);
-        $c = getSumJawabanFilter($val['id'], 3, $radiofilter, $fakultas);
-        $b = getSumJawabanFilter($val['id'], 4, $radiofilter, $fakultas);
-        $sb = getSumJawabanFilter($val['id'], 5, $radiofilter, $fakultas);
-        $data_table .= '
-        <tr>
-            <td>' . $val['pertanyaan'] . '</td>
-            <td>' . $sb . '</td>
-            <td>' . $b . '</td>
-            <td>' . $c . '</td>
-            <td>' . $k . '</td>
-            <td>' . $sk . '</td>
-        </tr>
-        ';
-        $jsb += $sb;
-        $jb += $b;
-        $jc += $c;
-        $jk += $k;
-        $jsk += $sk;
-    }
-} else {
-    $jRespon = getSumRespon($id);
-
-    foreach ($data as $key => $val) {
-        $sk = getSumJawaban($val['id'], 1);
-        $k = getSumJawaban($val['id'], 2);
-        $c = getSumJawaban($val['id'], 3);
-        $b = getSumJawaban($val['id'], 4);
-        $sb = getSumJawaban($val['id'], 5);
-        $data_table .= '
-        <tr>
-            <td>' . $val['pertanyaan'] . '</td>
-            <td>' . $sb . '</td>
-            <td>' . $b . '</td>
-            <td>' . $c . '</td>
-            <td>' . $k . '</td>
-            <td>' . $sk . '</td>
-        </tr>
-        ';
-        $jsb += $sb;
-        $jb += $b;
-        $jc += $c;
-        $jk += $k;
-        $jsk += $sk;
-    }
-}
-
-
-$jPertanyaan = getSumPertanyaan($id);
-
-$data_table2 = "";
-
-if ($jRespon == 0 || $jPertanyaan == 0) {
-    $data_table2 = "";
-} else {
-    $data_table2 .= '
+foreach ($data as $key => $val) {
+    $sb  = ($val['jawaban'] == '5') ? 'v' : '' ;
+    $b  = ($val['jawaban'] == "4") ? 'v' : '' ;
+    $c = ($val['jawaban'] == "3") ? 'v' : '' ;
+    $k  = ($val['jawaban'] == "2") ? 'v' : '' ;
+    $sk  = ($val['jawaban'] == "1") ? 'v' : '' ;
+    $data_table .='
     
     <tr>
-    <th>Rata-rata</td>
-    <th>' . round((($jsb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
-    <th>' . round((($jb / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
-    <th>' . round((($jc / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
-    <th>' . round((($jk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
-    <th>' . round((($jsk / $jPertanyaan) * 100) / $jRespon, 2) . '%</th>
+        <td>'.$val['pertanyaan'].'</td>
+        <td>'.$sb.'</td>
+        <td>'.$b.'</td>
+        <td>'.$c.'</td>
+        <td>'.$k.'</td>
+        <td>'.$sk.'</td>
     </tr>
-
-';
-}
-
-if ($data_table == "") {
-    $data_table = '<tr><td colspan=6 style="color:red"><center>DATA BELUM TERSEDIA</center></td><tr>';
-}
-
-$data_fakultas = getFakultas();
-
-$data_responden = getResponden($id);
-
-$datatable_responden = "";
-
-foreach ($data_responden as $key => $val) {
-    $datatable_responden .='
     
-    <tr>
-        <td>'.$val['nomor_induk'].'</td>
-        <td>'.$val['nama'].'</td>
-        <td>'.$val['progdi'].'</td>
-        <td>'.$val['fakultas'].'</td>
-        <td><a href="hasilSurveyDetail.php?id_survey='.$id.'&id_respon='.$val['id_respon'].'" class="btn btn-primary">Detail</a></td>
-    </tr>
-
     ';
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -207,7 +124,7 @@ foreach ($data_responden as $key => $val) {
                     </form>
 
                     <!-- Topbar Route -->
-                    <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="d-none d-lg-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100">
                         <div class="nav-item">
                             <span class="nav-link">
                                 <b class="mr-2 d-none d-lg-inline text-gray-800">Admin</b>
@@ -215,6 +132,8 @@ foreach ($data_responden as $key => $val) {
                                 <a href="view.php" class="nav-link text-danger"><b>View</b></a>
                                 <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 <a href="hasilSurvey.php?id_survey=<?=$id?>" class="nav-link text-danger"><b>Hasil Survey</b></a>
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                <a href="#" class="nav-link text-danger"><b>Hasil Survey Detail</b></a>
                             </span>
                         </div>
                     </div>
@@ -242,53 +161,17 @@ foreach ($data_responden as $key => $val) {
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800"></h1>
-                    <p class="h4 mb-4 text-danger">Jumlah Responden <?=$jRespon;?></p>
 
-                    <!-- Filter -->
-                    <div class="mb-2">
-                        <div class="d-flex justify-content-between ml-1 mr-1">
+                    <div class="d-flex justify-content-end ml-1 mr-1 mt-5">
                             <div>
-                                <a href="#filter" class="btn btn-warning" data-toggle="collapse" data-toggle="tooltip" title="Filter">Filter <i class="fas fa-fw fa-sliders-h"></i></a>
+                                <a href="exportHasilSurveyDetail.php?id_survey=<?=$id?>&id_respon=<?=$id_respon?>" target="_blank" rel="noopener noreferrer" class="btn btn-success">Export <i class="fas fa-fw fa-print"></i></a>
                             </div>                            
-                            <div>
-                                <a href="exportExcel.php?id_survey=<?=$id?>" target="_blank" rel="noopener noreferrer" class="btn btn-success">Export <i class="fas fa-fw fa-print"></i></a>
-                            </div>                            
-                        </div>
-                        <div class="collapse card-body" id="filter">
-                            <form method="post">
-                                <div class="form-group">
-                                    <label class="form-label h6">Sory By:</label>
-                                    <div class="form-check">
-                                        <input type="radio" class="form-check-input" id="filter1" name="radiofilter" value="5" checked>
-                                        <label class="form-check-label" for="filter1">Semua</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" class="form-check-input" id="filter2" name="radiofilter" value="4">
-                                        <label class="form-check-label" for="filter2">Mahasiswa</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" class="form-check-input" id="filter3" name="radiofilter" value="3">
-                                        <label class="form-check-label" for="filter3">Dosen</label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <!-- <input type="text" class="form-control col-sm-2 mr-2" name="textfilter" placeholder="Fakultas, Progdi">  -->
-                                    <select class="form-control col-sm-2 mr-2" name="fakultas">
-                                        <option value="">Pilih Fakultas</option>
-                                        <?php foreach($data_fakultas as $val){ ?>
-                                        <option value="<?= $val['id_fakultas'] ?>"><?= $val['fakultas'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <button type="submit" class="btn btn-danger" name="filter">Submit</button>
-                                </div>                                
-                            </form>                            
-                        </div>
                     </div>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4 mt-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-danger">Hasil Survey Keseluruhan</h6>
+                            <h6 class="m-0 font-weight-bold text-danger"><?= $nama ?></h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -306,9 +189,6 @@ foreach ($data_responden as $key => $val) {
                                            <th>Sangat Kurang</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <?=$data_table2?>
-                                    </tfoot>
                                     <tbody>
                                         <?=$data_table?>
                                         
@@ -317,39 +197,6 @@ foreach ($data_responden as $key => $val) {
                             </div>
                         </div>
                     </div>
-
-                    
-                    <div class="d-flex justify-content-end ml-1 mr-1 mt-5">
-                            <div>
-                                <a href="exportAllHasilSurvey.php?id_survey=<?=$id?>" target="_blank" rel="noopener noreferrer" class="btn btn-success">Export <i class="fas fa-fw fa-print"></i></a>
-                            </div>                            
-                    </div>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4 mt-2">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-danger">Responden</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                           <th>NIM</th>
-                                           <th>Nama</th>
-                                           <th>Fakultas</th>
-                                           <th>Progdi</th>
-                                           <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?= $datatable_responden ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <!-- /.container-fluid -->
 

@@ -684,4 +684,102 @@ function getProgdi(){
     return $hasil;
 }
 
+function getResponden($id){
+    global $con;
+    $hasil = array();
+    $sql = "SELECT respon.id_respon, users.id_user, users.nomor_induk, users.nama, progdi.progdi, fakultas.fakultas 
+            FROM respon 
+                JOIN users ON respon.id_user = users.id_user
+                JOIN progdi ON users.id_progdi = progdi.id_progdi
+                JOIN fakultas ON progdi.id_fakultas = fakultas.id_fakultas
+            WHERE respon.id_survey = :id";
+
+    try {
+        
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);  
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $i=0;
+            foreach($rs as $val){
+                $hasil[$i]['id_respon']= $val['id_respon'];
+                $hasil[$i]['id_user']= $val['id_user'];
+                $hasil[$i]['nomor_induk']= $val['nomor_induk'];
+                $hasil[$i]['nama']= $val['nama'];
+                $hasil[$i]['progdi']= $val['progdi'];
+                $hasil[$i]['fakultas']= $val['fakultas'];
+                $i++;
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getResponden = '.$e->getMessage();
+    }
+
+    return $hasil;
+}
+
+function getJawabanUser($id_survey, $id_respon){
+    global $con;
+    $hasil = array();
+    $sql = "SELECT pertanyaan.pertanyaan, jawaban.jawaban FROM jawaban
+                JOIN respon ON jawaban.id_respon = respon.id_respon
+                JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan
+                JOIN survey ON respon.id_survey = survey.id_survey
+            WHERE respon.id_respon = :id_respon AND survey.id_survey = :id_survey
+    ";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue('id_survey', $id_survey, PDO::PARAM_INT);
+        $stmt->bindValue('id_respon', $id_respon, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if ($rs != null) {
+            $i=0;
+            foreach ($rs as $val) {
+                $hasil[$i]['pertanyaan'] = $val['pertanyaan'];
+                $hasil[$i]['jawaban'] =  $val['jawaban'] ;
+                $i++;
+            }
+        }
+
+    } catch (Exception $e) {
+        echo"Error getJawabanUser = ".$e->getMessage();
+    }
+    return $hasil;
+}
+
+function getUserByRespon($id){
+    global $con;
+    $hasil = "";
+    $sql = "SELECT users.nama FROM respon 
+            JOIN users ON respon.id_user = users.id_user
+            WHERE id_respon = :id";
+
+    try {
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $rs = $stmt->fetchAll();
+
+        if($rs != null){
+            foreach($rs as $val){
+                $hasil = $val['nama'];
+            }
+        }
+    } catch (Exception $e) {
+        echo 'Error getUserByRespon = '.$e->getMessage();
+    }
+    return $hasil;
+}
+
+
+
+
 ?>
